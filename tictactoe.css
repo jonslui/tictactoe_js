@@ -1,0 +1,44 @@
+.tictactoeBoard {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: auto;
+    max-width: 500px;
+    max-height: 500px;
+}
+
+.emptyTile {
+    width: 32%;
+    padding-bottom: 32%;
+    margin: 1px;
+    background-color: rgb(235, 217, 194);
+    text-align: center;
+}
+
+.aTile {
+    width: 32%;
+    padding-bottom: 32%;
+    margin: 1px;
+    background-color: red;
+    text-align: center;
+}
+
+.bTile {
+    width: 32%;
+    padding-bottom: 32%;
+    margin: 1px;
+    background-color: blue);
+    text-align: center;
+}
+
+.playerA{
+
+}
+
+.playerB{
+
+}
+
+.header{
+    text-align: center;
+}
