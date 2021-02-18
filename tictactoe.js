@@ -19,11 +19,12 @@ var Gameboard = (function(){
     }
     
     function _setOwner() {
-        // pubsub
+        this.setAttribute('class', Gameflow.currentColor.color);
+        
+        // pubsubs : emits trigger functions in players 
         events.emit('tileAdded', this.id);
         events.emit('changePlayer');
-
-        currentPlayer == playerA ? this.setAttribute('class', 'aTile') : this.setAttribute('class', 'bTile');
+        
         this.removeEventListener("click", _setOwner);
     }
 

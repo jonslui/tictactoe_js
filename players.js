@@ -1,50 +1,59 @@
-var Gameplay = (function(){
+var Gameflow = (function(){
+    
+    const Player = (name) => {
+        var state = { tilesOwned : [],
+                    tileColor: null,
+        }        
 
-})()
+        function checkForWin(){
 
-const Player = (name) => {
-    var state = {   tilesOwned : [],
-                    currentPlayer : false,
+        }
+
+        return Object.assign(
+            {
+                name,
+                checkForWin,
+                state,
+            },
+        )
     }
 
-    // bind to pubsub event
-    // _addTile is called when a tile is clicked
-    events.on('tileAdded', _addTile)
-
-    // 
-    events.on('changePlayer', _changePlayer)
-
-    function _checkForWin(){
-        
-    }
-
-    function _changePlayer(){
-        if (state.currentPlayer == false){
-            state.currentPlayer = true
-        } else {
-            state.currentPlayer = false;
-        };
-    }
 
     function _addTile(tileId){
-        if(state.currentPlayer == true){
-            state.tilesOwned.push(tileId);
+        currentPlayer.state.tilesOwned.push(tileId);
+    }
+    // pubsub: _addTile is called when a tile is clicked
+    events.on('tileAdded', _addTile)
+
+
+    function _nextPlayer(){
+        if (currentPlayer == playerA){
+            currentPlayer = playerB;
+            currentColor.color = 'bTile';
+        } else {
+            currentPlayer = playerA;
+            currentColor.color = 'aTile';
         };
     }
-
-    return Object.assign(
-        {
-            name,
-            state,
-        },
-    )
-}
-
-const playerA = Player("jon");
-const playerB = Player("bon");
-
-// don't want currentPlayer to be public 
-playerB.state.currentPlayer = true;
+    // _nextPlayer is called when a tile is clicked
+    events.on('changePlayer', _nextPlayer)
 
 
-currentPlayer = playerB;
+
+    // Driver
+    const playerA = Player("jon");
+    playerA.state.tileColor = 'aTile';
+    const playerB = Player("bon");
+    playerB.state.tileColor = 'bTile';
+
+    var currentPlayer = playerA;
+    var currentColor = {color: playerA.state.tileColor}
+
+    return {
+        currentColor,
+
+        playerA,
+        playerB,
+    }
+
+})()
