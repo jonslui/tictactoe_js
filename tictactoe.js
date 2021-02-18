@@ -1,44 +1,33 @@
 var Gameboard = (function(){
-    var gameboard = [{ id: 0, owner: null },
-                    { id: 1, owner: null },
-                    { id: 2, owner: null },
-                    { id: 3, owner: null },
-                    { id: 4, owner: null },
-                    { id: 5, owner: null },
-                    { id: 6, owner: null },
-                    { id: 7, owner: null },
-                    { id: 8, owner: null },
+    var gameboard = [{ id: 0 }, { id: 1 }, { id: 2 },
+                    { id: 3 }, { id: 4 }, { id: 5 },
+                    { id: 6 }, { id: 7 }, { id: 8 },
     ]                    
 
-    function winTracker(tileId){
-        
-    }
     var tictactoeBoard = document.querySelector(".tictactoeBoard")
 
-    function assignOwner(player, tileId){
-        gameboard[tileId].owner = player;
-        printBoard();
+    function _createBoard(){
+        gameboard.forEach(tile => _createTile(tile));
     }
 
-    function createBoard(){
-        gameboard.forEach(tile => createTile(tile));
-    }
-
-    function createTile(tile){
+    function _createTile(tile){
         var newTile = document.createElement("div");
         newTile.setAttribute('id', tile.id);
         newTile.setAttribute('class','emptyTile');
-        newTile.addEventListener("click", setOwner);
+        newTile.addEventListener("click", _setOwner);
         tictactoeBoard.appendChild(newTile);
     }
     
-    function setOwner() {
-        // console.log(gameboard[this.id].owner);
-        // pull data about whos turn it is from outside the module
-        this.removeEventListener("click", setOwner);
+    function _setOwner() {
+        // pubsub
+        events.emit('tileAdded', this.id);
+        events.emit('changePlayer');
+
+        currentPlayer == playerA ? this.setAttribute('class', 'aTile') : this.setAttribute('class', 'bTile');
+        this.removeEventListener("click", _setOwner);
     }
 
-    createBoard();
+    _createBoard();
 
     return {
 
@@ -47,4 +36,3 @@ var Gameboard = (function(){
 })()
 
 
-// create players
