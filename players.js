@@ -4,10 +4,7 @@ var Gameflow = (function(){
         var state = { tilesOwned : [],
                     tileColor: null,
         }    
-        
-        // 0  1  2
-        // 3  4  5
-        // 6  7  8
+
         function checkForWin(){
             if(this.state.tilesOwned.length >= 3){
                 if(this.state.tilesOwned.includes("0") == true){
@@ -76,6 +73,12 @@ var Gameflow = (function(){
             }
         }
 
+        // removes tiles from the area when the "eraseBoard" event is sent to pubsub from tictactoe.js
+        function _emptyTilesOwned(){
+            state.tilesOwned = [];
+        }
+        events.on('eraseBoard', _emptyTilesOwned)
+
         return Object.assign(
             {
                 name,
@@ -108,8 +111,6 @@ var Gameflow = (function(){
     }
     // _nextPlayer is called when a tile is clicked
     events.on('changePlayer', _nextPlayer)
-
-
 
     // Driver
     const playerA = Player("jon");

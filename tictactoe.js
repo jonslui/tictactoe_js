@@ -4,7 +4,8 @@ var Gameboard = (function(){
                     { id: "6" }, { id: "7" }, { id: "8" },
     ]                    
 
-    var tictactoeBoard = document.querySelector(".tictactoeBoard")
+    var tictactoeBoard = document.querySelector(".tictactoeBoard");
+    document.getElementById("restartButton").addEventListener("click", _eraseBoard)
 
     function _createBoard(){
         gameboard.forEach(tile => _createTile(tile));
@@ -28,6 +29,17 @@ var Gameboard = (function(){
         this.removeEventListener("click", _setOwner);
     }
 
+    function _eraseBoard(){
+        // remove all children from the tictactoeBoard div
+        tictactoeBoard.querySelectorAll('*').forEach(n => n.remove());
+        
+        // send pubsub signal which will signal players to empty their arrays
+        events.emit('eraseBoard')
+
+        // recreate board for new game
+        _createBoard();
+    }
+
     _createBoard();
 
     return {
@@ -37,3 +49,5 @@ var Gameboard = (function(){
 })()
 
 
+// add a restart/new game button
+// add change name functionality
