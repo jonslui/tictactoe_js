@@ -25,6 +25,11 @@ var Gameflow = (function(){
                     }
                 }
 
+                // if the length of tilesOwned is 5, and it didn't pass true for the above functions, the game has been tied
+                if(this.state.tilesOwned.length == 5){
+                    return "tie";
+                }
+
                 return false;               
             };
         }
@@ -94,7 +99,9 @@ var Gameflow = (function(){
         currentPlayer.state.tilesOwned.push(tileId);
         if (currentPlayer.checkForWin() == true){
             alert("win");
-        };
+        } else if (currentPlayer.checkForWin() == "tie"){
+            alert("tie");
+        }
     }
     // pubsub: _addTile is called when a tile ise clicked
     events.on('tileAdded', _addTile)

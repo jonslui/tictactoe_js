@@ -49,5 +49,4 @@ var Gameboard = (function(){
 })()
 
 
-// add a restart/new game button
 // add change name functionality
