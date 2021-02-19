@@ -3,10 +3,77 @@ var Gameflow = (function(){
     const Player = (name) => {
         var state = { tilesOwned : [],
                     tileColor: null,
-        }        
-
+        }    
+        
+        // 0  1  2
+        // 3  4  5
+        // 6  7  8
         function checkForWin(){
+            if(this.state.tilesOwned.length >= 3){
+                if(this.state.tilesOwned.includes("0") == true){
+                    if (waysToWinWith0(this.state.tilesOwned) == true){
+                        return true;
+                    };
+                }
 
+                if(this.state.tilesOwned.includes("4") == true){
+                    if (waysToWinWith4(this.state.tilesOwned) == true){
+                        return true;
+                    }
+                }
+
+                if(this.state.tilesOwned.includes("8") == true){
+                    if (waysToWinWith8(this.state.tilesOwned) == true){
+                        return true;
+                    }
+                }
+
+                return false;               
+            };
+        }
+
+        function waysToWinWith0(array){
+           var row1 = ["1","2"];
+           var column1 = ["3","6"];
+           var diag1 = ["4","8"];
+
+            if (row1.every(i => array.includes(i))){
+                return true;
+            } else if (column1.every(i => array.includes(i))){
+                return true;
+            } else if (diag1.every(i => array.includes(i))){
+                return true;
+            } else {
+                return false;
+            }
+        }
+        
+        function waysToWinWith4(array){
+            var row2 = ["3","5"];
+            var column2 = ["1","7"];
+            var diag2 = ["2","6"];
+
+            if (row2.every(i => array.includes(i))){
+                return true;
+            } else if (column2.every(i => array.includes(i))){
+                return true;
+            } else if (diag2.every(i => array.includes(i))){
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function waysToWinWith8(array){
+            var row3 = ["6","7"];
+            var column3 = ["2","5"];
+            if (row3.every(i => array.includes(i))){
+                return true;
+            } else if (column3.every(i => array.includes(i))){
+                return true;
+            } else {
+                return false;
+            }
         }
 
         return Object.assign(
@@ -19,10 +86,14 @@ var Gameflow = (function(){
     }
 
 
+    // add a Tile to your array and checkForWin when a tile is clicked
     function _addTile(tileId){
         currentPlayer.state.tilesOwned.push(tileId);
+        if (currentPlayer.checkForWin() == true){
+            alert("win");
+        };
     }
-    // pubsub: _addTile is called when a tile is clicked
+    // pubsub: _addTile is called when a tile ise clicked
     events.on('tileAdded', _addTile)
 
 
@@ -51,9 +122,6 @@ var Gameflow = (function(){
 
     return {
         currentColor,
-
-        playerA,
-        playerB,
     }
 
 })()

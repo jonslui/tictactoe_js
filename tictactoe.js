@@ -1,7 +1,7 @@
 var Gameboard = (function(){
-    var gameboard = [{ id: 0 }, { id: 1 }, { id: 2 },
-                    { id: 3 }, { id: 4 }, { id: 5 },
-                    { id: 6 }, { id: 7 }, { id: 8 },
+    var gameboard = [{ id: "0" }, { id: "1" }, { id: "2" },
+                    { id: "3" }, { id: "4" }, { id: "5" },
+                    { id: "6" }, { id: "7" }, { id: "8" },
     ]                    
 
     var tictactoeBoard = document.querySelector(".tictactoeBoard")
@@ -20,7 +20,7 @@ var Gameboard = (function(){
     
     function _setOwner() {
         this.setAttribute('class', Gameflow.currentColor.color);
-        
+
         // pubsubs : emits trigger functions in players 
         events.emit('tileAdded', this.id);
         events.emit('changePlayer');
