@@ -1,8 +1,9 @@
 var Gameflow = (function(){
-    
+
     const Player = (name) => {
         var state = { tilesOwned : [],
                     tileColor: null,
+                    ishuman: true,
         }    
 
         function checkForWin(){
@@ -98,9 +99,11 @@ var Gameflow = (function(){
     function _addTile(tileId){
         currentPlayer.state.tilesOwned.push(tileId);
         if (currentPlayer.checkForWin() == true){
-            alert("win");
+            alert(currentPlayer.name + " wins!");
+            events.emit('gameover');
         } else if (currentPlayer.checkForWin() == "tie"){
             alert("tie");
+            events.emit('gameover');
         }
     }
     // pubsub: _addTile is called when a tile ise clicked
@@ -119,11 +122,30 @@ var Gameflow = (function(){
     // _nextPlayer is called when a tile is clicked
     events.on('changePlayer', _nextPlayer)
 
-    // Driver
-    const playerA = Player("jon");
-    playerA.state.tileColor = 'aTile';
-    const playerB = Player("bon");
-    playerB.state.tileColor = 'bTile';
+    function createPlayers(){
+        // create first human player
+        var playerAName = prompt("Enter the name of Player 1: ");
+        playerA = Player(playerAName);
+        playerA.state.tileColor = 'aTile';
+
+    
+        // create robot or human player
+        var playerBName = prompt("Enter the name of Player 2, or click cancel for Robot: ");
+        if (playerBName != null){
+            playerB = Player(playerBName);
+            playerB.state.tileColor = 'bTile';
+        } else {
+            playerB = Player("Sparky");
+            playerB.state.tileColor = 'bTile';
+            playerB.ishuman = false;
+        }
+    }
+
+
+    var playerA = null;
+    var playerB = null;
+    createPlayers();
+
 
     var currentPlayer = playerA;
     var currentColor = {color: playerA.state.tileColor}

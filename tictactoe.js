@@ -29,6 +29,11 @@ var Gameboard = (function(){
         this.removeEventListener("click", _setOwner);
     }
 
+    function removeClick(){
+        tictactoeBoard.querySelectorAll('*').forEach(n => n.removeEventListener("click",_setOwner));
+    }
+    events.on('gameover', removeClick);
+
     function _eraseBoard(){
         // remove all children from the tictactoeBoard div
         tictactoeBoard.querySelectorAll('*').forEach(n => n.remove());
@@ -43,10 +48,7 @@ var Gameboard = (function(){
     _createBoard();
 
     return {
-
+        removeClick
     }
     
 })()
-
-
-// add change name functionality
