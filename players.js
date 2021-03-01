@@ -98,6 +98,12 @@ var Gameflow = (function(){
     // add a Tile to your array and checkForWin when a tile is clicked
     function _addTile(tileId){
         currentPlayer.state.tilesOwned.push(tileId);
+        
+        // if player B is a robot, call function and remove the last tile chosen playerB's availableTiles array
+        if (playerB.state.availableTiles){
+            removeTileFromPossibleMoves(tileId);
+        }
+
         if (currentPlayer.checkForWin() == true){
             alert(currentPlayer.name + " wins!");
             events.emit('gameover');
@@ -106,7 +112,7 @@ var Gameflow = (function(){
             events.emit('gameover');
         }
     }
-    // pubsub: _addTile is called when a tile ise clicked
+    // pubsub: _addTile is called when a tile is clicked
     events.on('tileAdded', _addTile)
 
 
@@ -114,6 +120,16 @@ var Gameflow = (function(){
         if (currentPlayer == playerA){
             currentPlayer = playerB;
             currentColor.color = 'bTile';
+
+            // randomMove(playerB.state.availableTiles)
+            // includ minimax/choose random
+            // then recall from the choose random function?
+            if (playerB.state.ishuman == false){
+                randomMove(playerB.state.availableTiles)
+            }
+           
+
+
         } else {
             currentPlayer = playerA;
             currentColor.color = 'aTile';
@@ -127,7 +143,6 @@ var Gameflow = (function(){
         var playerAName = prompt("Enter the name of Player 1: ");
         playerA = Player(playerAName);
         playerA.state.tileColor = 'aTile';
-
     
         // create robot or human player
         var playerBName = prompt("Enter the name of Player 2, or click cancel for Robot: ");
@@ -137,8 +152,26 @@ var Gameflow = (function(){
         } else {
             playerB = Player("Sparky");
             playerB.state.tileColor = 'bTile';
-            playerB.ishuman = false;
+            playerB.state.ishuman = false;
+            playerB.state.availableTiles = ["0","1","2","3","4","5","6","7","8"]
         }
+    }
+
+    function removeTileFromPossibleMoves(tileId){
+        // console.log(tileId)
+        let index = playerB.state.availableTiles.indexOf(tileId);
+        // console.log(index);
+        playerB.state.availableTiles.splice(index, 1);
+        console.log(playerB.state.availableTiles);
+    }
+
+
+    function randomMove(array){
+        // Choose a random index from the array with remaining moves
+        var randomId = Math.floor(Math.random() * array.length);
+
+        // emit event with the id from the random index to the Gameboard module
+        events.emit('randomMove', array[randomId]);
     }
 
 
@@ -155,3 +188,15 @@ var Gameflow = (function(){
     }
 
 })()
+
+// create random move function
+// work on minimax
+
+
+
+
+// _nextPlayer()
+// randomMove()
+// removeTileFromPossibleMoves()
+// checkforWin()
+// _nextPlayer()

@@ -18,7 +18,23 @@ var Gameboard = (function(){
         newTile.addEventListener("click", _setOwner);
         tictactoeBoard.appendChild(newTile);
     }
-    
+
+
+
+    // Recieve event with random available tile id emitted from Gameplay module
+    events.on('randomMove', _setOwnerRobot);
+    function _setOwnerRobot(randomId){
+        tile = document.getElementById(randomId)
+
+        tile.setAttribute('class', Gameflow.currentColor.color);
+        events.emit('tileAdded', tile.id);
+        events.emit('changePlayer');
+
+        tile.removeEventListener("click", _setOwner);
+    }
+
+
+    // Used for human players
     function _setOwner() {
         this.setAttribute('class', Gameflow.currentColor.color);
 
@@ -48,7 +64,8 @@ var Gameboard = (function(){
     _createBoard();
 
     return {
-        removeClick
+        removeClick,
+        _setOwner
     }
     
 })()
