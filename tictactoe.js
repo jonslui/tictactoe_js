@@ -20,7 +20,6 @@ var Gameboard = (function(){
     }
 
 
-
     // Recieve event with random available tile id emitted from Gameplay module
     events.on('randomMove', _setOwnerRobot);
     function _setOwnerRobot(randomId){
@@ -45,10 +44,12 @@ var Gameboard = (function(){
         this.removeEventListener("click", _setOwner);
     }
 
+   
+    events.on('gameover', removeClick);
     function removeClick(){
         tictactoeBoard.querySelectorAll('*').forEach(n => n.removeEventListener("click",_setOwner));
     }
-    events.on('gameover', removeClick);
+
 
     function _eraseBoard(){
         // remove all children from the tictactoeBoard div
@@ -61,11 +62,12 @@ var Gameboard = (function(){
         _createBoard();
     }
 
+
     _createBoard();
+
 
     return {
         removeClick,
-        _setOwner
     }
     
 })()

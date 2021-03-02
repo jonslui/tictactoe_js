@@ -1,5 +1,7 @@
 var Gameflow = (function(){
 
+    availableTiles = ["0","1","2","3","4","5","6","7","8"]
+
     const Player = (name) => {
         var state = { tilesOwned : [],
                     tileColor: null,
@@ -10,25 +12,33 @@ var Gameflow = (function(){
             if(this.state.tilesOwned.length >= 3){
                 if(this.state.tilesOwned.includes("0") == true){
                     if (waysToWinWith0(this.state.tilesOwned) == true){
+                        alert(currentPlayer.name + " wins!");
+                        events.emit('gameover');
                         return true;
                     };
                 }
 
                 if(this.state.tilesOwned.includes("4") == true){
                     if (waysToWinWith4(this.state.tilesOwned) == true){
+                        alert(currentPlayer.name + " wins!");
+                        events.emit('gameover');
                         return true;
                     }
                 }
 
                 if(this.state.tilesOwned.includes("8") == true){
                     if (waysToWinWith8(this.state.tilesOwned) == true){
+                        alert(currentPlayer.name + " wins!");
+                        events.emit('gameover');
                         return true;
                     }
                 }
 
                 // if the length of tilesOwned is 5, and it didn't pass true for the above functions, the game has been tied
                 if(this.state.tilesOwned.length == 5){
-                    return "tie";
+                    alert("Tie!");
+                    events.emit('gameover');
+                    return true;
                 }
 
                 return false;               
@@ -94,54 +104,48 @@ var Gameflow = (function(){
         )
     }
 
-
+    // pubsub: _addTile is called when a tile is clicked
+    events.on('tileAdded', _addTile)
     // add a Tile to your array and checkForWin when a tile is clicked
     function _addTile(tileId){
         currentPlayer.state.tilesOwned.push(tileId);
-        
-        // if player B is a robot, call function and remove the last tile chosen playerB's availableTiles array
-        if (playerB.state.availableTiles){
-            removeTileFromPossibleMoves(tileId);
-        }
-
-        if (currentPlayer.checkForWin() == true){
-            alert(currentPlayer.name + " wins!");
-            events.emit('gameover');
-        } else if (currentPlayer.checkForWin() == "tie"){
-            alert("tie");
-            events.emit('gameover');
-        }
+        removeTileFromPossibleMoves(tileId)
     }
-    // pubsub: _addTile is called when a tile is clicked
-    events.on('tileAdded', _addTile)
 
 
-    function _nextPlayer(){
-        if (currentPlayer == playerA){
-            currentPlayer = playerB;
-            currentColor.color = 'bTile';
-
-            // randomMove(playerB.state.availableTiles)
-            // includ minimax/choose random
-            // then recall from the choose random function?
-            if (playerB.state.ishuman == false){
-                randomMove(playerB.state.availableTiles)
-            }
-           
-
-
-        } else {
-            currentPlayer = playerA;
-            currentColor.color = 'aTile';
-        };
-    }
     // _nextPlayer is called when a tile is clicked
+    // _nextPlayer calls checkForWin() to see if the currentPlayer's last move was a winning one,
+    // If their last move was not a winning one, the function changes the current player.
+    // If the next player is not a human, then randomMove() is called
     events.on('changePlayer', _nextPlayer)
+    function _nextPlayer(){
+        if (currentPlayer.checkForWin() == true){
+           return;
+           
+        } else {
+            if (currentPlayer == playerA){
+                currentPlayer = playerB;
+                currentColor.color = 'bTile';
+
+                // automatically choose randomTile if playerB isn't human
+                if (playerB.state.ishuman == false){
+                    randomMove(availableTiles)
+                }
+            } else {
+                currentPlayer = playerA;
+                currentColor.color = 'aTile';
+            };
+        }
+    }
 
     function createPlayers(){
         // create first human player
         var playerAName = prompt("Enter the name of Player 1: ");
-        playerA = Player(playerAName);
+        if (playerAName){
+            playerA = Player(playerAName);
+        } else {
+            playerA = Player("Player 1");
+        }
         playerA.state.tileColor = 'aTile';
     
         // create robot or human player
@@ -153,16 +157,13 @@ var Gameflow = (function(){
             playerB = Player("Sparky");
             playerB.state.tileColor = 'bTile';
             playerB.state.ishuman = false;
-            playerB.state.availableTiles = ["0","1","2","3","4","5","6","7","8"]
         }
     }
 
+
     function removeTileFromPossibleMoves(tileId){
-        // console.log(tileId)
-        let index = playerB.state.availableTiles.indexOf(tileId);
-        // console.log(index);
-        playerB.state.availableTiles.splice(index, 1);
-        console.log(playerB.state.availableTiles);
+        let index = availableTiles.indexOf(tileId);
+        availableTiles.splice(index, 1);
     }
 
 
@@ -175,6 +176,12 @@ var Gameflow = (function(){
     }
 
 
+    function minimax(){
+        // need array of empty spaces
+        // already have array of tilesOwned for each player
+
+    }
+
     var playerA = null;
     var playerB = null;
     createPlayers();
@@ -184,19 +191,13 @@ var Gameflow = (function(){
     var currentColor = {color: playerA.state.tileColor}
 
     return {
-        currentColor,
+        currentColor
     }
 
 })()
 
-// create random move function
 // work on minimax
+    // change how availableTiles is saved in playerB, make it available within the whole module
+    // just move availableTiles to a array in the Gameflow module, not attacked to any player
 
-
-
-
-// _nextPlayer()
-// randomMove()
-// removeTileFromPossibleMoves()
-// checkforWin()
-// _nextPlayer()
+// move content from beginning of _nextPlayer into "checkForWin"?
