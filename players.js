@@ -1,7 +1,5 @@
 var Gameflow = (function(){
 
-    availableTiles = ["0","1","2","3","4","5","6","7","8"]
-
     const Player = (name) => {
         var state = { tilesOwned : [],
                     tileColor: null,
@@ -12,33 +10,25 @@ var Gameflow = (function(){
             if(this.state.tilesOwned.length >= 3){
                 if(this.state.tilesOwned.includes("0") == true){
                     if (waysToWinWith0(this.state.tilesOwned) == true){
-                        alert(currentPlayer.name + " wins!");
-                        events.emit('gameover');
                         return true;
                     };
                 }
 
                 if(this.state.tilesOwned.includes("4") == true){
                     if (waysToWinWith4(this.state.tilesOwned) == true){
-                        alert(currentPlayer.name + " wins!");
-                        events.emit('gameover');
                         return true;
                     }
                 }
 
                 if(this.state.tilesOwned.includes("8") == true){
                     if (waysToWinWith8(this.state.tilesOwned) == true){
-                        alert(currentPlayer.name + " wins!");
-                        events.emit('gameover');
                         return true;
                     }
                 }
 
                 // if the length of tilesOwned is 5, and it didn't pass true for the above functions, the game has been tied
                 if(this.state.tilesOwned.length == 5){
-                    alert("Tie!");
-                    events.emit('gameover');
-                    return true;
+                    return "tie";
                 }
 
                 return false;               
@@ -106,12 +96,10 @@ var Gameflow = (function(){
 
     // pubsub: _addTile is called when a tile is clicked
     events.on('tileAdded', _addTile)
-    // add a Tile to your array and checkForWin when a tile is clicked
-    function _addTile(tileId){
-        currentPlayer.state.tilesOwned.push(tileId);
-        removeTileFromPossibleMoves(tileId)
+    // add a Tile to player array and checkForWin when a tile is clicked
+    function _addTile(tileId, player = currentPlayer){
+        player.state.tilesOwned.push(tileId);
     }
-
 
     // _nextPlayer is called when a tile is clicked
     // _nextPlayer calls checkForWin() to see if the currentPlayer's last move was a winning one,
@@ -120,8 +108,13 @@ var Gameflow = (function(){
     events.on('changePlayer', _nextPlayer)
     function _nextPlayer(){
         if (currentPlayer.checkForWin() == true){
-           return;
-           
+            events.emit('gameover');
+            alert(currentPlayer.name + " wins!");
+            return;   
+        } else if(currentPlayer.checkForWin() == "tie") {
+            events.emit('gameover');
+            alert("Tie!");
+            return;
         } else {
             if (currentPlayer == playerA){
                 currentPlayer = playerB;
@@ -129,7 +122,7 @@ var Gameflow = (function(){
 
                 // automatically choose randomTile if playerB isn't human
                 if (playerB.state.ishuman == false){
-                    randomMove(availableTiles)
+                    randomMove(getEmptyTiles())
                 }
             } else {
                 currentPlayer = playerA;
@@ -160,13 +153,6 @@ var Gameflow = (function(){
         }
     }
 
-
-    function removeTileFromPossibleMoves(tileId){
-        let index = availableTiles.indexOf(tileId);
-        availableTiles.splice(index, 1);
-    }
-
-
     function randomMove(array){
         // Choose a random index from the array with remaining moves
         var randomId = Math.floor(Math.random() * array.length);
@@ -175,11 +161,91 @@ var Gameflow = (function(){
         events.emit('randomMove', array[randomId]);
     }
 
+    function getEmptyTiles(){
+        let all_tiles = ["0","1","2","3","4","5","6","7","8"]
+        
+        let filled_tiles = []
+        playerA.state.tilesOwned.forEach(tile => filled_tiles.push(tile));
+        playerB.state.tilesOwned.forEach(tile => filled_tiles.push(tile));
+        
+        let empty_tiles = all_tiles.filter(tile => !filled_tiles.includes(tile));
+        return empty_tiles;
+    }
 
-    function minimax(){
-        // need array of empty spaces
-        // already have array of tilesOwned for each player
+    function bestMove(){
+        let bestEvaluation = -Infinity;
+        let move;
+        let empty_tiles = getEmptyTiles()
+        for(i = 0; i < empty_tiles.length; i++){
+            // add tile to array
+            _addTile(empty_tiles[i], playerB);
 
+            let evaluation = minimax(playerB, false);
+            
+            // remove tile move from array
+            let index = playerB.state.tilesOwned.indexOf(empty_tiles[i]);
+            if (index > -1) {
+                playerB.state.tilesOwned.splice(index, 1);
+            }
+
+            if (evaluation > bestEvaluation) {
+                bestEvaluation = evaluation;
+                move = empty_tiles[i];
+            }
+        }
+        _addTile(move, playerB);
+        currentPlayer = playerA;
+
+    }
+
+    function minimax(player, isMaximizing){
+        if(player.state.ishuman == false && player.checkForWin() == true){
+            console.log("robot win");
+            return +10;
+        }
+        if(player.state.ishuman == true && player.checkForWin() == true){
+            console.log("human win");
+            return -10;
+        }
+
+        if(player.checkForWin() == "tie"){
+            console.log("tie");
+            return 0;
+        }
+        
+        if (isMaximizing == true){
+            let bestEvaluation = -Infinity;
+            let empty_tiles = getEmptyTiles();
+
+            for(i=0; i<empty_tiles.length; i++){
+                _addTile(empty_tiles[i], playerB);
+                let evaluation = minimax(playerA, false);
+                
+                let index = playerB.state.tilesOwned.indexOf(empty_tiles[i]);
+                if (index > -1) {
+                    playerB.state.tilesOwned.splice(index, 1);
+                }
+                bestEvaluation = Math.max(evaluation, bestEvaluation);
+            }
+
+            return bestEvaluation;
+        } else {
+            let bestEvaluation = Infinity;
+            let empty_tiles = getEmptyTiles();
+
+            for(i=0; i<empty_tiles.length; i++){
+                _addTile(empty_tiles[i], playerA);
+                let evaluation = minimax(playerB, false);
+                
+                let index = playerA.state.tilesOwned.indexOf(empty_tiles[i]);
+                if (index > -1) {
+                    playerA.state.tilesOwned.splice(index, 1);
+                }
+                bestEvaluation = Math.min(evaluation, bestEvaluation);
+            }
+
+            return bestEvaluation;
+        }
     }
 
     var playerA = null;
@@ -191,13 +257,16 @@ var Gameflow = (function(){
     var currentColor = {color: playerA.state.tileColor}
 
     return {
-        currentColor
+        currentColor,
+        getEmptyTiles,
+        minimax,
+        _addTile,
+        playerA,
+        playerB,
+        bestMove,
     }
 
 })()
 
 // work on minimax
-    // change how availableTiles is saved in playerB, make it available within the whole module
-    // just move availableTiles to a array in the Gameflow module, not attacked to any player
-
-// move content from beginning of _nextPlayer into "checkForWin"?
+// https://www.youtube.com/watch?v=ovr2sTYhb1I was following this video
