@@ -21,12 +21,11 @@ var Gameboard = (function(){
 
 
     // Recieve event with random available tile id emitted from Gameplay module
-    events.on('randomMove', _setOwnerRobot);
-    function _setOwnerRobot(randomId){
-        tile = document.getElementById(randomId)
+    events.on('foundBestMove', _setOwnerRobot);
+    function _setOwnerRobot(bestMove){
+        tile = document.getElementById(bestMove)
 
         tile.setAttribute('class', Gameflow.currentColor.color);
-        events.emit('tileAdded', tile.id);
         events.emit('changePlayer');
 
         tile.removeEventListener("click", _setOwner);

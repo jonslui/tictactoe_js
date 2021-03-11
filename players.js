@@ -104,7 +104,7 @@ var Gameflow = (function(){
     // _nextPlayer is called when a tile is clicked
     // _nextPlayer calls checkForWin() to see if the currentPlayer's last move was a winning one,
     // If their last move was not a winning one, the function changes the current player.
-    // If the next player is not a human, then randomMove() is called
+    // If the next player is not a human, then findBestMove() is called
     events.on('changePlayer', _nextPlayer)
     function _nextPlayer(){
         if (currentPlayer.checkForWin() == true){
@@ -120,9 +120,9 @@ var Gameflow = (function(){
                 currentPlayer = playerB;
                 currentColor.color = 'bTile';
 
-                // automatically choose randomTile if playerB isn't human
+                // call findBestMove() if playerB isn't human
                 if (playerB.state.ishuman == false){
-                    randomMove(getEmptyTiles())
+                    findBestMove();
                 }
             } else {
                 currentPlayer = playerA;
@@ -153,14 +153,6 @@ var Gameflow = (function(){
         }
     }
 
-    function randomMove(array){
-        // Choose a random index from the array with remaining moves
-        var randomId = Math.floor(Math.random() * array.length);
-
-        // emit event with the id from the random index to the Gameboard module
-        events.emit('randomMove', array[randomId]);
-    }
-
     function getEmptyTiles(){
         let all_tiles = ["0","1","2","3","4","5","6","7","8"]
         
@@ -172,75 +164,59 @@ var Gameflow = (function(){
         return empty_tiles;
     }
 
-    function bestMove(){
+    function findBestMove(){
         let bestEvaluation = -Infinity;
-        let move;
-        let empty_tiles = getEmptyTiles()
+        let bestMove;
+        let empty_tiles = getEmptyTiles();
         for(i = 0; i < empty_tiles.length; i++){
-            // add tile to array
             _addTile(empty_tiles[i], playerB);
-
-            let evaluation = minimax(playerB, false);
-            
-            // remove tile move from array
-            let index = playerB.state.tilesOwned.indexOf(empty_tiles[i]);
-            if (index > -1) {
-                playerB.state.tilesOwned.splice(index, 1);
-            }
+            let evaluation = minimax(false, 0);
+            playerB.state.tilesOwned.pop();
 
             if (evaluation > bestEvaluation) {
                 bestEvaluation = evaluation;
-                move = empty_tiles[i];
+                bestMove = empty_tiles[i];
             }
         }
-        _addTile(move, playerB);
-        currentPlayer = playerA;
-
+        _addTile(bestMove, playerB);
+        events.emit('foundBestMove', bestMove);
     }
 
-    function minimax(player, isMaximizing){
-        if(player.state.ishuman == false && player.checkForWin() == true){
-            console.log("robot win");
-            return +10;
-        }
-        if(player.state.ishuman == true && player.checkForWin() == true){
-            console.log("human win");
+
+    function minimax(isMaximizing, depth){
+        // exit cases
+        if(playerA.checkForWin() == true){
             return -10;
         }
-
-        if(player.checkForWin() == "tie"){
-            console.log("tie");
+        if(playerB.checkForWin() == true){
+            return +10;
+        }
+        if(playerA.checkForWin() == "tie" || playerB.checkForWin() == "tie"){
             return 0;
         }
         
-        if (isMaximizing == true){
+        if (isMaximizing){
             let bestEvaluation = -Infinity;
             let empty_tiles = getEmptyTiles();
 
             for(i=0; i<empty_tiles.length; i++){
                 _addTile(empty_tiles[i], playerB);
-                let evaluation = minimax(playerA, false);
-                
-                let index = playerB.state.tilesOwned.indexOf(empty_tiles[i]);
-                if (index > -1) {
-                    playerB.state.tilesOwned.splice(index, 1);
-                }
+                let evaluation = minimax(false, depth + 1);
+                playerB.state.tilesOwned.pop();
+
                 bestEvaluation = Math.max(evaluation, bestEvaluation);
             }
 
             return bestEvaluation;
         } else {
-            let bestEvaluation = Infinity;
+            let bestEvaluation = +Infinity;
             let empty_tiles = getEmptyTiles();
 
             for(i=0; i<empty_tiles.length; i++){
                 _addTile(empty_tiles[i], playerA);
-                let evaluation = minimax(playerB, false);
-                
-                let index = playerA.state.tilesOwned.indexOf(empty_tiles[i]);
-                if (index > -1) {
-                    playerA.state.tilesOwned.splice(index, 1);
-                }
+                let evaluation = minimax(true, depth + 1);
+                playerA.state.tilesOwned.pop();
+
                 bestEvaluation = Math.min(evaluation, bestEvaluation);
             }
 
@@ -258,12 +234,13 @@ var Gameflow = (function(){
 
     return {
         currentColor,
+        currentPlayer,
         getEmptyTiles,
         minimax,
         _addTile,
         playerA,
         playerB,
-        bestMove,
+        findBestMove,
     }
 
 })()
