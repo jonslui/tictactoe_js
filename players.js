@@ -236,13 +236,6 @@ var Gameflow = (function(){
 
     return {
         currentColor,
-        currentPlayer,
-        getEmptyTiles,
-        minimax,
-        _addTile,
-        playerA,
-        playerB,
-        findBestMove,
     }
 
 })()
