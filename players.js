@@ -168,11 +168,13 @@ var Gameflow = (function(){
         let bestEvaluation = -Infinity;
         let bestMove;
         let empty_tiles = getEmptyTiles();
-        for(i = 0; i < empty_tiles.length; i++){
+        for(let i = 0; i < empty_tiles.length; i++){
             _addTile(empty_tiles[i], playerB);
             let evaluation = minimax(false, 0);
             playerB.state.tilesOwned.pop();
 
+            // console.log("evaluation: " + evaluation + " tile: " + empty_tiles[i]);
+            
             if (evaluation > bestEvaluation) {
                 bestEvaluation = evaluation;
                 bestMove = empty_tiles[i];
@@ -186,10 +188,10 @@ var Gameflow = (function(){
     function minimax(isMaximizing, depth){
         // exit cases
         if(playerA.checkForWin() == true){
-            return -10;
+            return -10 - depth;
         }
         if(playerB.checkForWin() == true){
-            return +10;
+            return +10 - depth;
         }
         if(playerA.checkForWin() == "tie" || playerB.checkForWin() == "tie"){
             return 0;
@@ -199,11 +201,11 @@ var Gameflow = (function(){
             let bestEvaluation = -Infinity;
             let empty_tiles = getEmptyTiles();
 
-            for(i=0; i<empty_tiles.length; i++){
+            for(let i=0; i<empty_tiles.length; i++){
                 _addTile(empty_tiles[i], playerB);
                 let evaluation = minimax(false, depth + 1);
                 playerB.state.tilesOwned.pop();
-
+                
                 bestEvaluation = Math.max(evaluation, bestEvaluation);
             }
 
@@ -212,7 +214,7 @@ var Gameflow = (function(){
             let bestEvaluation = +Infinity;
             let empty_tiles = getEmptyTiles();
 
-            for(i=0; i<empty_tiles.length; i++){
+            for(let i=0; i<empty_tiles.length; i++){
                 _addTile(empty_tiles[i], playerA);
                 let evaluation = minimax(true, depth + 1);
                 playerA.state.tilesOwned.pop();
@@ -244,6 +246,3 @@ var Gameflow = (function(){
     }
 
 })()
-
-// work on minimax
-// https://www.youtube.com/watch?v=ovr2sTYhb1I was following this video
