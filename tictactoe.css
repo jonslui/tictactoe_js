@@ -14,12 +14,15 @@
     background-color: rgb(235, 217, 194);
     text-align: center;
 }
+.emptyTile:hover {
+    opacity: 0.4;
+}
 
 .aTile {
     width: 32%;
     padding-bottom: 32%;
     margin: 1px;
-    background-color: red;
+    background-color: rgb(236, 34, 34);
     text-align: center;
 }
 
@@ -27,10 +30,96 @@
     width: 32%;
     padding-bottom: 32%;
     margin: 1px;
-    background-color: blue;
+    background-color: rgb(51, 51, 235);
     text-align: center;
 }
 
 .header{
     text-align: center;
+}
+
+/* popup form, hidden by default */
+.form-popup {
+    display: none;
+    border: 3px solid black;
+    z-index: 9;
+    /* position: fixed; */
+
+    margin: auto;
+    max-width: 500px;
+    max-height: 500px;
+}
+
+/* style addings for form container */
+.form-container {
+    max-width: 480px;
+    padding: 10px;
+    background-color: white;
+}
+
+/* input fields */
+.form-container input[type=text] {
+    width: 90%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    border: none;
+    background: #f1f1f1;
+}
+
+/* when input fields are being used, highlight */
+.form-container input[type=text]:focus {
+    background-color: #ddd;
+    outline: none;
+}
+
+/* submit button styling */
+.form-container #submitbtn {
+    background-color: #4CAF50;
+    color:white;
+    padding: 16px 20px;
+    border:none;
+    cursor: pointer;
+    width: 45%;
+    margin-bottom:10px;
+    opacity: 0.8;
+}
+
+/* button hover effect */
+.form-container .submitbtn:hover{
+    opacity: 1;
+}
+
+
+/* container for new game and change player buttons */
+#button-container{
+    text-align:center;
+    font-size: 0;
+}
+#restartButton{
+    background-color: #4CAF50;
+    color:white;
+    padding: 16px 20px;
+    border:none;
+    cursor: pointer;
+    margin-bottom:10px;
+    opacity: 0.8;
+    margin: auto;
+    width:242px;
+}
+#restartButton:hover{
+    opacity:1;
+}
+#changePlayers{
+    background-color: #4CAF50;
+    color:white;
+    padding: 16px 20px;
+    border:none;
+    cursor: pointer;
+    margin-bottom:10px;
+    opacity: 0.8;
+    margin: auto;
+    width:242px;
+}
+#changePlayers:hover{
+    opacity:1;
 }

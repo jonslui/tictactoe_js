@@ -9,11 +9,32 @@
     </head>
     <body>
         <h1 class = "header">Tic Tac Toe</h1>
+        
+        <!-- player creation form -->
+        <div class="form-popup" id="myForm">
+            <form action = "" class="form-container" onSubmit = "Form.closeForm(this); return false;">
+
+                <label for="playerAName"><b>Player 1</b></label>
+                <input type="text" placeholder = "Enter Player 1's Name" name ="playerAName" id ="playerAName" value = "" required>
+                
+                <label for="playerBName"><b>Player 2</b></label>
+                <input type = "checkbox" id = "ishumanplayer" name = "ishumanplayer">
+                <label for = "ishumanplayer">AI Player</label>
+                <input type="text" placeholder = "Enter Player 2's Name" name="playerBName" id = "playerBName" required>
+
+                <button type = "submit" id = "submitbtn">Start Game</button>
+            </form>
+        </div>
+
         <div class="tictactoeBoard"></div>
-        <button id = "restartButton">New Game</button>
+        <div id="button-container">
+            <button id = "restartButton">New Game</button>
+            <button id = "changePlayers">Change Players</button>
+        </div>
 
         <script src="pubsub.js"></script>
         <script src="tictactoe.js"></script>
         <script src="players.js"></script>
+        <script src="form.js"></script>
     </body> 
 </html>

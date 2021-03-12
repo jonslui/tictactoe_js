@@ -7,6 +7,7 @@ var Gameboard = (function(){
     var tictactoeBoard = document.querySelector(".tictactoeBoard");
     document.getElementById("restartButton").addEventListener("click", _eraseBoard)
 
+    events.on('playersCreated', _createBoard)
     function _createBoard(){
         gameboard.forEach(tile => _createTile(tile));
     }
@@ -62,7 +63,7 @@ var Gameboard = (function(){
     }
 
 
-    _createBoard();
+    // _createBoard();
 
 
     return {

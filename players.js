@@ -127,30 +127,29 @@ var Gameflow = (function(){
             } else {
                 currentPlayer = playerA;
                 currentColor.color = 'aTile';
+
+                // if (playerA.state.ishuman == false){
+                //     findBestMove();
+                // }
             };
         }
     }
 
-    function createPlayers(){
+    events.on('formComplete', createPlayers)
+    function createPlayers(players){
         // create first human player
-        var playerAName = prompt("Enter the name of Player 1: ");
-        if (playerAName){
-            playerA = Player(playerAName);
-        } else {
-            playerA = Player("Player 1");
-        }
+        playerA = Player(players[0].name);
         playerA.state.tileColor = 'aTile';
     
         // create robot or human player
-        var playerBName = prompt("Enter the name of Player 2, or click cancel for Robot: ");
-        if (playerBName != null){
-            playerB = Player(playerBName);
-            playerB.state.tileColor = 'bTile';
-        } else {
-            playerB = Player("Sparky");
-            playerB.state.tileColor = 'bTile';
+        playerB = Player(players[1].name);
+        playerB.state.tileColor = 'bTile';
+        if (players[1].isrobot == true){
             playerB.state.ishuman = false;
-        }
+        } 
+
+        currentColor = {color: playerA.state.tileColor};
+        events.emit('playersCreated');
     }
 
     function getEmptyTiles(){
@@ -172,8 +171,6 @@ var Gameflow = (function(){
             _addTile(empty_tiles[i], playerB);
             let evaluation = minimax(false, 0);
             playerB.state.tilesOwned.pop();
-
-            // console.log("evaluation: " + evaluation + " tile: " + empty_tiles[i]);
             
             if (evaluation > bestEvaluation) {
                 bestEvaluation = evaluation;
@@ -226,16 +223,25 @@ var Gameflow = (function(){
         }
     }
 
-    var playerA = null;
-    var playerB = null;
-    createPlayers();
-
-
+    // create player variables so they're refrenceable post creation
+    var playerA;
+    var playerB;
     var currentPlayer = playerA;
-    var currentColor = {color: playerA.state.tileColor}
+    var currentColor;
+
 
     return {
+        playerA,
+        playerB,
         currentColor,
     }
 
 })()
+
+
+// Ideas: 
+
+// Add a history pop out, where you can see your past games
+// Make minmax work with robot player being player 1 -- just make starting player be playerB if player 1 is chosen to be a robot
+// Make player creation become a popup form: https://www.w3schools.com/howto/howto_js_popup_form.asp
+
