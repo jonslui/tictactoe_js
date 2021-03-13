@@ -21,7 +21,7 @@ var Gameboard = (function(){
     }
 
 
-    // Recieve event with random available tile id emitted from Gameplay module
+    // Recieve event with tile id emitted from Gameplay module
     events.on('foundBestMove', _setOwnerRobot);
     function _setOwnerRobot(bestMove){
         tile = document.getElementById(bestMove)
@@ -61,14 +61,8 @@ var Gameboard = (function(){
         _createBoard();
     }
 
-
-    // _createBoard();
-
-
     return {
         removeClick,
-        _eraseBoard,
-        _createBoard,
     }
     
 })()

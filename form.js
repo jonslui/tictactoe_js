@@ -7,14 +7,22 @@ var Form = (function(){
 
     function playerBNameBox(){
         if(aiPlayerButton.checked == true){
-            document.getElementById("playerBName").placeholder = "Enter AI Player's name";
+            document.getElementById("playerBName").value = "Sparky";
         } else {
+            document.getElementById("playerBName").value = "";
             document.getElementById("playerBName").placeholder = "Enter Player 2's name";
         }
     }
 
     function openForm(){
+        // removes previous session storage data when a new form is opened
         sessionStorage.clear();
+
+        // hide new game and change players buttons 
+        document.getElementById("changePlayers").setAttribute('style', 'display: none;')
+        document.getElementById("restartButton").setAttribute('style', 'display: none;')
+
+
         let inputForm = document.getElementById("myForm");
         inputForm.style.display = "block";
     }
@@ -23,7 +31,12 @@ var Form = (function(){
         let inputForm = document.getElementById("myForm");
         inputForm.style.display = "none";
 
-        // save to session storage
+        // reveal new game and change players buttons 
+        document.getElementById("changePlayers").setAttribute('style', 'display: block;')
+        document.getElementById("restartButton").setAttribute('style', 'display: block;')
+
+
+        // save to input data to session storage, when form submits and page reloads, createPlayers() function in players.js will be called
         sessionStorage.setItem('playerAName', form.playerAName.value);
         sessionStorage.setItem('playerBName', form.playerBName.value);
         sessionStorage.setItem('playerBRobot', aiPlayerButton.checked);
@@ -37,9 +50,3 @@ var Form = (function(){
         closeForm,
     }
 })()
-
-
-// fix popup functionality so it covers up board instead of inserting above it
-// remove "new game"/"change players" buttons when the form is up
-// auto generate name when AI player is clicked so if player doesn't want to type one in they can use that one
-// display past games in miniature below large board

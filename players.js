@@ -232,19 +232,19 @@ var Gameflow = (function(){
     var currentPlayer = playerA;
 
     return {
-        playerA,
-        playerB,
         currentColor,
-        currentPlayer,
     }
 
 })()
 
 
 
-// Ideas: 
-
-// Add a history pop out, where you can see your past games
+// TODO: 
+// fix popup functionality so it covers up board instead of inserting above it
+// display past games in miniature below large board
+// add difficulties to the AI
 // Make minmax work with robot player being player 1 -- just make starting player be playerB if player 1 is chosen to be a robot
-// Make player creation become a popup form: https://www.w3schools.com/howto/howto_js_popup_form.asp
 
+// DONE:
+// remove "new game"/"change players" buttons when the form is up
+// auto generate name when AI player is clicked so if player doesn't want to type one in they can use that one
