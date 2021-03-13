@@ -127,24 +127,19 @@ var Gameflow = (function(){
             } else {
                 currentPlayer = playerA;
                 currentColor.color = 'aTile';
-
-                // if (playerA.state.ishuman == false){
-                //     findBestMove();
-                // }
             };
         }
     }
 
-    events.on('formComplete', createPlayers)
-    function createPlayers(players){
+    function createPlayers(){
         // create first human player
-        playerA = Player(players[0].name);
+        playerA = Player(sessionStorage.getItem('playerAName'));
         playerA.state.tileColor = 'aTile';
     
-        // create robot or human player
-        playerB = Player(players[1].name);
+        // create second human player or ai
+        playerB = Player(sessionStorage.getItem('playerBName'));
         playerB.state.tileColor = 'bTile';
-        if (players[1].isrobot == true){
+        if (sessionStorage.getItem('playerBRobot') == "true"){
             playerB.state.ishuman = false;
         } 
 
@@ -226,17 +221,25 @@ var Gameflow = (function(){
     // create player variables so they're refrenceable post creation
     var playerA;
     var playerB;
-    var currentPlayer = playerA;
     var currentColor;
 
+
+    // if data exists in sessionStorage call createPlayers, otherwise do nothing
+    if (sessionStorage.length != 0) {
+        createPlayers();
+    }
+
+    var currentPlayer = playerA;
 
     return {
         playerA,
         playerB,
         currentColor,
+        currentPlayer,
     }
 
 })()
+
 
 
 // Ideas: 

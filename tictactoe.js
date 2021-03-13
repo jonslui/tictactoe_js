@@ -50,7 +50,6 @@ var Gameboard = (function(){
         tictactoeBoard.querySelectorAll('*').forEach(n => n.removeEventListener("click",_setOwner));
     }
 
-
     function _eraseBoard(){
         // remove all children from the tictactoeBoard div
         tictactoeBoard.querySelectorAll('*').forEach(n => n.remove());
@@ -68,6 +67,8 @@ var Gameboard = (function(){
 
     return {
         removeClick,
+        _eraseBoard,
+        _createBoard,
     }
     
 })()

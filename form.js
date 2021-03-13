@@ -14,6 +14,7 @@ var Form = (function(){
     }
 
     function openForm(){
+        sessionStorage.clear();
         let inputForm = document.getElementById("myForm");
         inputForm.style.display = "block";
     }
@@ -22,18 +23,23 @@ var Form = (function(){
         let inputForm = document.getElementById("myForm");
         inputForm.style.display = "none";
 
-        let playerA = {}
-        let playerB = {}
-        playerA.name = form.playerAName.value;
-        playerB.name = form.playerBName.value;
-        playerB.isrobot = aiPlayerButton.checked;
-        
-        events.emit('formComplete', [playerA, playerB]);
+        // save to session storage
+        sessionStorage.setItem('playerAName', form.playerAName.value);
+        sessionStorage.setItem('playerBName', form.playerBName.value);
+        sessionStorage.setItem('playerBRobot', aiPlayerButton.checked);
     }
 
-    openForm();
+    if(sessionStorage.length == 0){
+        openForm();
+    }
 
     return {
         closeForm,
     }
 })()
+
+
+// fix popup functionality so it covers up board instead of inserting above it
+// remove "new game"/"change players" buttons when the form is up
+// auto generate name when AI player is clicked so if player doesn't want to type one in they can use that one
+// display past games in miniature below large board
