@@ -105,7 +105,7 @@ var Gameflow = (function(){
     // _nextPlayer is called when a tile is clicked
     // _nextPlayer calls checkForWin() to see if the currentPlayer's last move was a winning one,
     // If their last move was not a winning one, the function changes the current player.
-    // If the next player is not a human, then findBestMove() is called
+    // If the next player is not a human, then call chooseAiMove()
     events.on('changePlayer', _nextPlayer)
     function _nextPlayer(){
         if (currentPlayer.checkForWin() == true){
@@ -121,19 +121,24 @@ var Gameflow = (function(){
                 currentPlayer = playerB;
                 currentColor.color = 'bTile';
 
-                // if difficulty level == 3 (unbeatable), only call findBestMove()
-                // otherwise call randomMove() when Math.random is less than 1/difficulty
                 if (playerB.state.ishuman == false){
-                    if(playerB.state.difficulty == 3){
-                        findBestMove();
-                    } else {
-                        Math.random() < 1/playerB.state.difficulty ? randomMove() : findBestMove();
-                    }
+                    chooseAiMove();
                 }
             } else {
                 currentPlayer = playerA;
                 currentColor.color = 'aTile';
             };
+        }
+    }
+
+    // if difficulty level == 3 (unbeatable), only call findBestMove()
+    // otherwise call randomMove() when Math.random is less than 1/difficulty
+    function chooseAiMove(){
+        if(playerB.state.difficulty == 3){
+            findBestMove();
+        } else {
+            // multiplied by 2 to increase difficulty curve
+            Math.random() < 1/(playerB.state.difficulty*2) ? randomMove() : findBestMove();
         }
     }
 
@@ -258,8 +263,6 @@ var Gameflow = (function(){
 
 
 // TODO: 
-// fix popup functionality so it covers up board instead of inserting above it
 // display past games in miniature below large board
-// add difficulties to the AI: Can make 3-4 different difficulty levels, done by increasing the chance that the player will choose the optimal move with each level. Lowest dificulty being completely random selection, highest difficulty being completely optimal.
 // Make minmax work with robot player being player 1 -- just make starting player be playerB if player 1 is chosen to be a robot
 // change file names through git: gameboard, gameflow, form

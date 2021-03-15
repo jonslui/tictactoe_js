@@ -2,6 +2,7 @@ var Form = (function(){
 
     document.getElementById("changePlayers").addEventListener("click", openForm);
 
+
     let aiPlayerButton = document.getElementById("ishumanplayer");
     aiPlayerButton.addEventListener("click", playerBNameBox);
 
@@ -28,10 +29,12 @@ var Form = (function(){
         // hide new game and change players buttons 
         document.getElementById("changePlayers").setAttribute('style', 'display: none;')
         document.getElementById("restartButton").setAttribute('style', 'display: none;')
-
-
         let inputForm = document.getElementById("myForm");
         inputForm.style.display = "block";
+
+        // remove ability to click on tiles when form is opened
+        events.emit('gameover')
+
     }
 
 
