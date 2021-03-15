@@ -34,9 +34,22 @@ var Form = (function(){
         inputForm.style.display = "block";
     }
 
+
+    function getSelectedRadioBtnIndex(){
+        let difficultyRadioBtns = document.getElementsByName('difficulty')
+
+        for(i=0; i < difficultyRadioBtns.length; i++){
+            if(difficultyRadioBtns[i].checked == true){
+                return i;
+            }
+        }
+    }
+
     function closeForm(form){
         let inputForm = document.getElementById("myForm");
         inputForm.style.display = "none";
+
+        let difficultyLevel = getSelectedRadioBtnIndex();
 
         // reveal new game and change players buttons 
         document.getElementById("changePlayers").setAttribute('style', 'display: block;')
@@ -47,6 +60,7 @@ var Form = (function(){
         sessionStorage.setItem('playerAName', form.playerAName.value);
         sessionStorage.setItem('playerBName', form.playerBName.value);
         sessionStorage.setItem('playerBRobot', aiPlayerButton.checked);
+        sessionStorage.setItem('playerBDifficulty', difficultyLevel);
     }
 
     if(sessionStorage.length == 0){

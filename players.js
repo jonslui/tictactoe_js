@@ -121,10 +121,14 @@ var Gameflow = (function(){
                 currentPlayer = playerB;
                 currentColor.color = 'bTile';
 
-                // call findBestMove() if playerB isn't human
+                // if difficulty level == 3 (unbeatable), only call findBestMove()
+                // otherwise call randomMove() when Math.random is less than 1/difficulty
                 if (playerB.state.ishuman == false){
-                    findBestMove();
-                    // randomMove();
+                    if(playerB.state.difficulty == 3){
+                        findBestMove();
+                    } else {
+                        Math.random() < 1/playerB.state.difficulty ? randomMove() : findBestMove();
+                    }
                 }
             } else {
                 currentPlayer = playerA;
@@ -143,6 +147,7 @@ var Gameflow = (function(){
         playerB.state.tileColor = 'bTile';
         if (sessionStorage.getItem('playerBRobot') == "true"){
             playerB.state.ishuman = false;
+            playerB.state.difficulty = parseInt(sessionStorage.getItem('playerBDifficulty'));
         } 
 
         currentColor = {color: playerA.state.tileColor};
@@ -245,6 +250,7 @@ var Gameflow = (function(){
 
     return {
         currentColor,
+        playerB,
     }
 
 })()
