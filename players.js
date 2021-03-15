@@ -4,6 +4,7 @@ var Gameflow = (function(){
         var state = { tilesOwned : [],
                     tileColor: null,
                     ishuman: true,
+                    difficulty: null,
         }    
 
         function checkForWin(){
@@ -123,6 +124,7 @@ var Gameflow = (function(){
                 // call findBestMove() if playerB isn't human
                 if (playerB.state.ishuman == false){
                     findBestMove();
+                    // randomMove();
                 }
             } else {
                 currentPlayer = playerA;
@@ -158,6 +160,16 @@ var Gameflow = (function(){
         return empty_tiles;
     }
 
+    function randomMove(){
+        let empty_tiles = getEmptyTiles();
+        let randomMove = empty_tiles[Math.floor(Math.random() * empty_tiles.length)];
+
+        _addTile(randomMove, playerB);
+    
+        events.emit('aiMove', randomMove);
+    }
+
+
     function findBestMove(){
         let bestEvaluation = -Infinity;
         let bestMove;
@@ -173,7 +185,7 @@ var Gameflow = (function(){
             }
         }
         _addTile(bestMove, playerB);
-        events.emit('foundBestMove', bestMove);
+        events.emit('aiMove', bestMove);
     }
 
 
@@ -242,9 +254,6 @@ var Gameflow = (function(){
 // TODO: 
 // fix popup functionality so it covers up board instead of inserting above it
 // display past games in miniature below large board
-// add difficulties to the AI
+// add difficulties to the AI: Can make 3-4 different difficulty levels, done by increasing the chance that the player will choose the optimal move with each level. Lowest dificulty being completely random selection, highest difficulty being completely optimal.
 // Make minmax work with robot player being player 1 -- just make starting player be playerB if player 1 is chosen to be a robot
-
-// DONE:
-// remove "new game"/"change players" buttons when the form is up
-// auto generate name when AI player is clicked so if player doesn't want to type one in they can use that one
+// change file names through git: gameboard, gameflow, form

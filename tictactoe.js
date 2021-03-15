@@ -22,7 +22,7 @@ var Gameboard = (function(){
 
 
     // Recieve event with tile id emitted from Gameplay module
-    events.on('foundBestMove', _setOwnerRobot);
+    events.on('aiMove', _setOwnerRobot);
     function _setOwnerRobot(bestMove){
         tile = document.getElementById(bestMove)
 

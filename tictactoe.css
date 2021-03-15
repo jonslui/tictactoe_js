@@ -89,6 +89,15 @@
     opacity: 1;
 }
 
+.form-container #difficultieslabel {
+    display: none;
+}
+
+.form-container #difficulties {
+    display: none;
+    margin: 5px 0 22px 0;
+
+}
 
 /* container for new game and change player buttons */
 #button-container{
@@ -123,3 +132,4 @@
 #changePlayers:hover{
     opacity:1;
 }
+

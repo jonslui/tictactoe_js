@@ -8,7 +8,14 @@ var Form = (function(){
     function playerBNameBox(){
         if(aiPlayerButton.checked == true){
             document.getElementById("playerBName").value = "Sparky";
+            document.getElementById("difficulty1").setAttribute('required','');
+            document.getElementById("difficulties").setAttribute('style','display: block');
+            document.getElementById("difficultieslabel").setAttribute('style','display: block');
+
         } else {
+            document.getElementById("difficulties").removeAttribute('required');
+            document.getElementById("difficulties").setAttribute('style','display: none');
+            document.getElementById("difficultieslabel").setAttribute('style','display: none');
             document.getElementById("playerBName").value = "";
             document.getElementById("playerBName").placeholder = "Enter Player 2's name";
         }
