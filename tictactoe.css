@@ -43,13 +43,11 @@
     display: none;
     border: 3px solid black;
     z-index: 9;
-    right: 30.25%;
-    left: 30.25%;
+    margin: 0 auto;
 
-    position: fixed;
 
-    margin: auto;
     max-width: 500px;
+    min-width: 320px;
     max-height: 500px;
 }
 

@@ -32,8 +32,8 @@ var Form = (function(){
         let inputForm = document.getElementById("myForm");
         inputForm.style.display = "block";
 
-        // remove ability to click on tiles when form is opened
-        events.emit('gameover')
+        // clear the board when form is opened
+        events.emit('formOpened');
 
     }
 

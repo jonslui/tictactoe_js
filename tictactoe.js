@@ -50,7 +50,7 @@ var Gameboard = (function(){
         tictactoeBoard.querySelectorAll('*').forEach(n => n.removeEventListener("click",_setOwner));
     }
 
-    function _eraseBoard(){
+    function _eraseBoard(fromForm = false){
         // remove all children from the tictactoeBoard div
         tictactoeBoard.querySelectorAll('*').forEach(n => n.remove());
         
@@ -59,6 +59,14 @@ var Gameboard = (function(){
 
         // recreate board for new game
         _createBoard();
+    }
+
+    // eraseboard function minus createBoard, triggered when a form is opened. 
+    // players don't empty their tiles because game will be reset at closeForm.
+    events.on('formOpened', _eraseBoard2);
+    function _eraseBoard2(){
+        // remove all children from the tictactoeBoard div
+        tictactoeBoard.querySelectorAll('*').forEach(n => n.remove());
     }
 
     return {

@@ -266,3 +266,5 @@ var Gameflow = (function(){
 // display past games in miniature below large board
 // Make minmax work with robot player being player 1 -- just make starting player be playerB if player 1 is chosen to be a robot
 // change file names through git: gameboard, gameflow, form
+// stop tile hover effect once change players is clicked
+// make pop up the width of tictactoeboard(500px)
