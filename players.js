@@ -8,6 +8,7 @@ var Gameflow = (function(){
         }    
 
         function checkForWin(){
+
             if(this.state.tilesOwned.length >= 3){
                 if(this.state.tilesOwned.includes("0") == true){
                     if (waysToWinWith0(this.state.tilesOwned) == true){
@@ -94,6 +95,18 @@ var Gameflow = (function(){
             },
         )
     }
+
+
+    // Is there a more elequent way to do this?
+    // When restart button is clicked, currents must be set to playerA/Color
+    document.getElementById("restartButton").addEventListener("click", changeCurrents);
+    function changeCurrents(){
+        currentPlayer = playerA;
+        currentColor.color = "aTile";
+    }
+
+
+
 
     // pubsub: _addTile is called when a tile is clicked
     events.on('tileAdded', _addTile)
@@ -253,9 +266,10 @@ var Gameflow = (function(){
 
     var currentPlayer = playerA;
 
+
     return {
         currentColor,
-        playerB,
+        currentPlayer,
     }
 
 })()
@@ -263,8 +277,6 @@ var Gameflow = (function(){
 
 
 // TODO: 
-// display past games in miniature below large board
 // Make minmax work with robot player being player 1 -- just make starting player be playerB if player 1 is chosen to be a robot
 // change file names through git: gameboard, gameflow, form
-// stop tile hover effect once change players is clicked
-// make pop up the width of tictactoeboard(500px)
+// add title above completed games, add counting scoreboard, filter games into sections for which player won or lost

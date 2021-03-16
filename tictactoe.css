@@ -134,3 +134,24 @@
     opacity:1;
 }
 
+
+/* add past games into this div, with each game displayed in one block the size of a tile in current game */
+.pastGames {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: auto;
+    max-width: 492.5px;
+    padding-top: 5%;
+}
+
+/* div inside of .pastGames, contains a single game */
+.completedGame{
+    width: 32%;
+    padding-bottom: 1.46%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: auto;
+    text-align: center;
+}

@@ -5,6 +5,8 @@ var Gameboard = (function(){
     ]                    
 
     var tictactoeBoard = document.querySelector(".tictactoeBoard");
+    var pastGamesDisplay = document.querySelector(".pastGames")
+
     document.getElementById("restartButton").addEventListener("click", _eraseBoard)
 
     events.on('playersCreated', _createBoard)
@@ -50,7 +52,10 @@ var Gameboard = (function(){
         tictactoeBoard.querySelectorAll('*').forEach(n => n.removeEventListener("click",_setOwner));
     }
 
-    function _eraseBoard(fromForm = false){
+    function _eraseBoard(){
+    
+        addGameToPastGames();
+
         // remove all children from the tictactoeBoard div
         tictactoeBoard.querySelectorAll('*').forEach(n => n.remove());
         
@@ -59,6 +64,22 @@ var Gameboard = (function(){
 
         // recreate board for new game
         _createBoard();
+    }
+
+    // called from _eraseBoard (aka when new game button is clicked)
+    function addGameToPastGames(){
+        // append one completedGame to pastGames
+        // add tiles from last game to the new completedGame
+        var lastgame= document.createElement("div");
+        lastgame.setAttribute('class', 'completedGame');
+        pastGamesDisplay.appendChild(lastgame);
+        tictactoeBoard.querySelectorAll('*').forEach(oldTile => addOldTileToLastGame(oldTile, lastgame));
+    }
+
+    function addOldTileToLastGame(oldTile, lastgame){
+        let newTile = document.createElement("div");
+        newTile.setAttribute('class', oldTile.className);
+        lastgame.appendChild(newTile);
     }
 
     // eraseboard function minus createBoard, triggered when a form is opened. 
