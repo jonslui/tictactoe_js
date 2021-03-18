@@ -15,27 +15,46 @@
             <form action = "" class="form-container" onSubmit = "Form.closeForm(this)">
 
                 <label for="playerAName"><b>Player 1</b></label>
+                <input type = "checkbox" id = "playeraisrobot" name = "playeraisrobot">
+                <label for = "playeraisrobot" id = 'playeraisrobot_label'>AI Player</label>
                 <input type="text" placeholder = "Enter Player 1's Name" name ="playerAName" id ="playerAName" value = "" required>
-                
-                <label for="playerBName"><b>Player 2</b></label>
-                <input type = "checkbox" id = "ishumanplayer" name = "ishumanplayer">
-                <label for = "ishumanplayer">AI Player</label>
-                <input type="text" placeholder = "Enter Player 2's Name" name="playerBName" id = "playerBName" required>
-
-                <label id = "difficultieslabel" for = "difficulties"><b>AI Difficulty</b></label>
-                <div id = "difficulties" name = "difficulties">
+               
+                <label id = "difficultieslabelplayerA" for = "difficultiesForA"><b>AI Difficulty</b></label>
+                <div id = "difficultiesForA" name = "difficultiesForA">
                    
                     <label for = "difficulty1">Easy</label>
-                    <input type = "radio" id = "difficulty1" name = "difficulty">
+                    <input type = "radio" id = "difficulty1" name = "difficultyForA">
 
                     <label for = "difficulty2">Medium</label>
-                    <input type = "radio" id = "difficulty2" name = "difficulty">
+                    <input type = "radio" id = "difficulty2" name = "difficultyForA">
 
                     <label for = "difficulty3">Hard</label>
-                    <input type = "radio" id = "difficulty3" name = "difficulty">
+                    <input type = "radio" id = "difficulty3" name = "difficultyForA">
 
                     <label for = "difficulty4">Unbeatable</label>
-                    <input type = "radio" id = "difficulty4" name = "difficulty">
+                    <input type = "radio" id = "difficulty4" name = "difficultyForA">
+                </div>
+
+
+                <label for="playerBName"><b>Player 2</b></label>
+                <input type = "checkbox" id = "playerbisrobot" name = "playerbisrobot">
+                <label for = "playerbisrobot" id = "playerbisrobot_label">AI Player</label>
+                <input type="text" placeholder = "Enter Player 2's Name" name="playerBName" id = "playerBName" required>
+
+                <label id = "difficultieslabelplayerB" for = "difficultiesForB"><b>AI Difficulty</b></label>
+                <div id = "difficultiesForB" name = "difficultiesForB">
+                   
+                    <label for = "difficulty5">Easy</label>
+                    <input type = "radio" id = "difficulty5" name = "difficultyForB">
+
+                    <label for = "difficulty6">Medium</label>
+                    <input type = "radio" id = "difficulty6" name = "difficultyForB">
+
+                    <label for = "difficulty7">Hard</label>
+                    <input type = "radio" id = "difficulty7" name = "difficultyForB">
+
+                    <label for = "difficulty8">Unbeatable</label>
+                    <input type = "radio" id = "difficulty8" name = "difficultyForB">
                 </div>
 
                 <button type = "submit" id = "submitbtn">Start Game</button>

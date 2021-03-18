@@ -90,14 +90,20 @@
     opacity: 1;
 }
 
-.form-container #difficultieslabel {
+.form-container #difficultieslabelplayerA {
+    display: none;
+}
+.form-container #difficultieslabelplayerB {
     display: none;
 }
 
-.form-container #difficulties {
+.form-container #difficultiesForA {
     display: none;
     margin: 5px 0 22px 0;
-
+}
+.form-container #difficultiesForB {
+    display: none;
+    margin: 5px 0 22px 0;
 }
 
 /* container for new game and change player buttons */

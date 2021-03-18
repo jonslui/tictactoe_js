@@ -139,6 +139,10 @@ var Gameflow = (function(){
                 }
             } else {
                 currentPlayer = playerA;
+
+                if (playerA.state.ishuman == false){
+                    chooseAiMove();
+                }
                 currentColor.color = 'aTile';
             };
         }
@@ -159,6 +163,11 @@ var Gameflow = (function(){
         // create first human player
         playerA = Player(sessionStorage.getItem('playerAName'));
         playerA.state.tileColor = 'aTile';
+        if(sessionStorage.getItem('playerARobot') == "true"){
+            playerA.state.ishuman = false;
+            playerA.state.difficulty = parseInt(sessionStorage.getItem('playerADifficulty'));
+        }
+
     
         // create second human player or ai
         playerB = Player(sessionStorage.getItem('playerBName'));
@@ -269,7 +278,8 @@ var Gameflow = (function(){
 
     return {
         currentColor,
-        currentPlayer,
+        playerA,
+        playerB,
     }
 
 })()
@@ -278,5 +288,3 @@ var Gameflow = (function(){
 
 // TODO: 
 // Make minmax work with robot player being player 1 -- just make starting player be playerB if player 1 is chosen to be a robot
-// change file names through git: gameboard, gameflow, form
-// add previously played games to sessionStorage?
