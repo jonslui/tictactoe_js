@@ -142,7 +142,7 @@
     flex-wrap: wrap;
     margin: auto;
     max-width: 492.5px;
-    padding-top: 5%;
+    /* padding-top: 5%; */
 }
 
 /* div inside of .pastGames, contains a single game */
@@ -154,4 +154,14 @@
     flex-wrap: wrap;
     margin: auto;
     text-align: center;
+}
+
+.pastGamesLabels{
+    display: block;
+    text-align: left;
+    padding-left: 17px;
+    margin: 0 auto;
+    max-width: 500px;
+    padding-top: 2%;
+    padding-bottom: 2%;
 }

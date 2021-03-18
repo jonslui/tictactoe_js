@@ -5,7 +5,13 @@ var Gameboard = (function(){
     ]                    
 
     var tictactoeBoard = document.querySelector(".tictactoeBoard");
-    var pastGamesDisplay = document.querySelector(".pastGames")
+    var playerAGamesWon = document.getElementById("playerAGames");
+    var playerBGamesWon = document.getElementById("playerBGames");
+    let playerAWins = 0;
+    let playerAGamesWonLabel = document.getElementById('playerAWinsLabel');
+    let playerBGamesWonLabel = document.getElementById('playerBWinsLabel');
+    let playerBWins = 0;
+
 
     document.getElementById("restartButton").addEventListener("click", _eraseBoard)
 
@@ -52,10 +58,9 @@ var Gameboard = (function(){
         tictactoeBoard.querySelectorAll('*').forEach(n => n.removeEventListener("click",_setOwner));
     }
 
+    // called when new game button is clicked
     function _eraseBoard(){
     
-        addGameToPastGames();
-
         // remove all children from the tictactoeBoard div
         tictactoeBoard.querySelectorAll('*').forEach(n => n.remove());
         
@@ -66,13 +71,28 @@ var Gameboard = (function(){
         _createBoard();
     }
 
-    // called from _eraseBoard (aka when new game button is clicked)
-    function addGameToPastGames(){
+    // called when gameover is emited
+    events.on('gameover', addGameToPastGames);
+    function addGameToPastGames(winningColor){
         // append one completedGame to pastGames
         // add tiles from last game to the new completedGame
         var lastgame= document.createElement("div");
         lastgame.setAttribute('class', 'completedGame');
-        pastGamesDisplay.appendChild(lastgame);
+
+        // add Game to the div of the winning player
+        // does not finish the function if game was tied
+        if ( winningColor == "aTile"){
+            playerAWins += 1;
+            playerAGamesWonLabel.innerHTML = "Player 1 Wins: " + playerAWins;
+            playerAGamesWon.appendChild(lastgame);
+        } else if( winningColor == "bTile") {
+            playerBWins += 1;
+            playerBGamesWonLabel.innerHTML = "Player 2 Wins: " + playerBWins;
+            playerBGamesWon.appendChild(lastgame);
+        } else {
+            return;
+        }
+
         tictactoeBoard.querySelectorAll('*').forEach(oldTile => addOldTileToLastGame(oldTile, lastgame));
     }
 

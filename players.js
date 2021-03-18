@@ -122,8 +122,8 @@ var Gameflow = (function(){
     events.on('changePlayer', _nextPlayer)
     function _nextPlayer(){
         if (currentPlayer.checkForWin() == true){
-            events.emit('gameover');
             alert(currentPlayer.name + " wins!");
+            events.emit('gameover', currentColor.color);
             return;   
         } else if(currentPlayer.checkForWin() == "tie") {
             events.emit('gameover');
@@ -279,4 +279,4 @@ var Gameflow = (function(){
 // TODO: 
 // Make minmax work with robot player being player 1 -- just make starting player be playerB if player 1 is chosen to be a robot
 // change file names through git: gameboard, gameflow, form
-// add title above completed games, add counting scoreboard, filter games into sections for which player won or lost
+// add previously played games to sessionStorage?
