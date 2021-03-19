@@ -9,16 +9,7 @@ var Form = (function(){
 
 
     function aiPlayerCheckbox(){
-        if(aiPlayerBCheckbox.checked == true){
-            document.getElementById("playerBName").value = "Sparky";
-            document.getElementById("difficulty5").setAttribute('required','');
-            document.getElementById("difficultiesForB").setAttribute('style','display: block');
-            document.getElementById("difficultieslabelplayerB").setAttribute('style','display: block');
-
-            // hide the AI Player A checkbox + label if player B AI button is checked
-            aiPlayerACheckbox.style.display = 'none';
-            document.getElementById('playeraisrobot_label').style.display = 'none';
-        } else if (aiPlayerACheckbox.checked == true){
+        if (aiPlayerACheckbox.checked == true){
             document.getElementById("playerAName").value = "Sparky";
             document.getElementById("difficulty1").setAttribute('required','');
             document.getElementById("difficultiesForA").setAttribute('style','display: block');
@@ -26,23 +17,31 @@ var Form = (function(){
 
             // hide the AI Player B checkbox + label if player A AI button is checked
             aiPlayerBCheckbox.style.display = 'none';
-            document.getElementById('playerbisrobot_label').style.display = 'none';            
+            document.getElementById('playerbisrobot_label').style.display = 'none'; 
+        
+        } else if(aiPlayerBCheckbox.checked == true){
+            document.getElementById("playerBName").value = "Sparky";
+            document.getElementById("difficulty5").setAttribute('required','');
+            document.getElementById("difficultiesForB").setAttribute('style','display: block');
+            document.getElementById("difficultieslabelplayerB").setAttribute('style','display: block');
+
+            // hide the AI Player A checkbox + label if player B AI button is checked
+            aiPlayerACheckbox.style.display = 'none';
+            document.getElementById('playeraisrobot_label').style.display = 'none';           
         } 
         else if (aiPlayerACheckbox.checked == false && aiPlayerBCheckbox.checked == false){
-            document.getElementById("playerBName").value = "";
-            document.getElementById("playerBName").placeholder = "Enter Player 2's name";
-            document.getElementById("difficultiesForB").setAttribute('style','display: none');
-            document.getElementById("difficultieslabelplayerB").setAttribute('style','display: none');
-            document.getElementById("difficultiesForB").removeAttribute('required');
-
-
             document.getElementById("playerAName").value = "";
             document.getElementById("playerBName").placeholder = "Enter Player 1's name";
             document.getElementById("difficultiesForA").setAttribute('style','display: none');
             document.getElementById("difficultieslabelplayerA").setAttribute('style','display: none');
             document.getElementById("difficultiesForA").removeAttribute('required');
 
-        
+            document.getElementById("playerBName").value = "";
+            document.getElementById("playerBName").placeholder = "Enter Player 2's name";
+            document.getElementById("difficultiesForB").setAttribute('style','display: none');
+            document.getElementById("difficultieslabelplayerB").setAttribute('style','display: none');
+            document.getElementById("difficultiesForB").removeAttribute('required');
+
             // show player a checkbox + label if it is unchecked
             aiPlayerACheckbox.style.display = 'inline';
             aiPlayerBCheckbox.style.display = 'inline';
@@ -67,6 +66,7 @@ var Form = (function(){
     }
 
 
+    // simplfy this function so for loop is only written once
     function getSelectedRadioBtnIndex(){
         if (aiPlayerACheckbox.checked == true){
             let difficultyRadioBtns = document.getElementsByName('difficultyForA')
@@ -77,7 +77,13 @@ var Form = (function(){
                 }
             }
         }else if (aiPlayerBCheckbox.checked == true){
+            let difficultyRadioBtns = document.getElementsByName('difficultyForB')
 
+            for(i=0; i < difficultyRadioBtns.length; i++){
+                if(difficultyRadioBtns[i].checked == true){
+                    return i;
+                }
+            }
         }
     }
 

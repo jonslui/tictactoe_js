@@ -103,10 +103,41 @@ var Gameflow = (function(){
     function changeCurrents(){
         currentPlayer = playerA;
         currentColor.color = "aTile";
+        ifAiMakeFirstMove();
     }
 
+    function createPlayers(){
+        // create first human player
+        playerA = Player(sessionStorage.getItem('playerAName'));
+        playerA.state.tileColor = 'aTile';
+        if(sessionStorage.getItem('playerARobot') == "true"){
+            playerA.state.ishuman = false;
+            playerA.state.difficulty = parseInt(sessionStorage.getItem('playerADifficulty'));
+        }
 
+    
+        // create second human player or ai
+        playerB = Player(sessionStorage.getItem('playerBName'));
+        playerB.state.tileColor = 'bTile';
+        if (sessionStorage.getItem('playerBRobot') == "true"){
+            playerB.state.ishuman = false;
+            playerB.state.difficulty = parseInt(sessionStorage.getItem('playerBDifficulty'));
+        } 
 
+        currentColor = {color: playerA.state.tileColor};
+        currentPlayer = playerA;
+        events.emit('playersCreated');
+        
+        ifAiMakeFirstMove();
+    }
+
+    //function calls after a brief pause in order to give Gameboard.createBoard time to complete
+    function ifAiMakeFirstMove(){
+        if (playerA.state.ishuman == false){
+            setTimeout(function(){
+                chooseAiMove();} , 0.1);
+            }
+    }
 
     // pubsub: _addTile is called when a tile is clicked
     events.on('tileAdded', _addTile)
@@ -139,46 +170,25 @@ var Gameflow = (function(){
                 }
             } else {
                 currentPlayer = playerA;
+                currentColor.color = 'aTile';
 
                 if (playerA.state.ishuman == false){
                     chooseAiMove();
                 }
-                currentColor.color = 'aTile';
             };
         }
     }
 
+
     // if difficulty level == 3 (unbeatable), only call findBestMove()
     // otherwise call randomMove() when Math.random is less than 1/difficulty
     function chooseAiMove(){
-        if(playerB.state.difficulty == 3){
+        if(currentPlayer.state.difficulty == 3){
             findBestMove();
         } else {
             // multiplied by 2 to increase difficulty curve
-            Math.random() < 1/(playerB.state.difficulty*2) ? randomMove() : findBestMove();
+            Math.random() < 1/(currentPlayer.state.difficulty*2) ? randomMove(currentPlayer) : findBestMove();
         }
-    }
-
-    function createPlayers(){
-        // create first human player
-        playerA = Player(sessionStorage.getItem('playerAName'));
-        playerA.state.tileColor = 'aTile';
-        if(sessionStorage.getItem('playerARobot') == "true"){
-            playerA.state.ishuman = false;
-            playerA.state.difficulty = parseInt(sessionStorage.getItem('playerADifficulty'));
-        }
-
-    
-        // create second human player or ai
-        playerB = Player(sessionStorage.getItem('playerBName'));
-        playerB.state.tileColor = 'bTile';
-        if (sessionStorage.getItem('playerBRobot') == "true"){
-            playerB.state.ishuman = false;
-            playerB.state.difficulty = parseInt(sessionStorage.getItem('playerBDifficulty'));
-        } 
-
-        currentColor = {color: playerA.state.tileColor};
-        events.emit('playersCreated');
     }
 
     function getEmptyTiles(){
@@ -192,11 +202,11 @@ var Gameflow = (function(){
         return empty_tiles;
     }
 
-    function randomMove(){
+    function randomMove(player){
         let empty_tiles = getEmptyTiles();
         let randomMove = empty_tiles[Math.floor(Math.random() * empty_tiles.length)];
 
-        _addTile(randomMove, playerB);
+        _addTile(randomMove, player);
     
         events.emit('aiMove', randomMove);
     }
@@ -207,14 +217,15 @@ var Gameflow = (function(){
         let bestMove;
         let empty_tiles = getEmptyTiles();
         for(let i = 0; i < empty_tiles.length; i++){
-            _addTile(empty_tiles[i], playerB);
+            _addTile(empty_tiles[i], currentPlayer);
             let evaluation = minimax(false, 0);
-            playerB.state.tilesOwned.pop();
-            
+            currentPlayer.state.tilesOwned.pop();
+
             if (evaluation > bestEvaluation) {
                 bestEvaluation = evaluation;
                 bestMove = empty_tiles[i];
             }
+
         }
         _addTile(bestMove, playerB);
         events.emit('aiMove', bestMove);
@@ -266,6 +277,7 @@ var Gameflow = (function(){
     var playerA;
     var playerB;
     var currentColor;
+    var currentPlayer;
 
 
     // if data exists in sessionStorage call createPlayers, otherwise do nothing
@@ -273,13 +285,9 @@ var Gameflow = (function(){
         createPlayers();
     }
 
-    var currentPlayer = playerA;
-
 
     return {
         currentColor,
-        playerA,
-        playerB,
     }
 
 })()
@@ -288,3 +296,7 @@ var Gameflow = (function(){
 
 // TODO: 
 // Make minmax work with robot player being player 1 -- just make starting player be playerB if player 1 is chosen to be a robot
+    // TO CHANGE:
+        // findbestmove()
+        // minimax()
+// Change Player 1 and Player 2 at the bottom to their player names
