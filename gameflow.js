@@ -136,7 +136,7 @@ var Gameflow = (function(){
         if (playerA.state.ishuman == false){
             setTimeout(function(){
                 chooseAiMove();} , 0.1);
-            }
+        }
     }
 
     // pubsub: _addTile is called when a tile is clicked
@@ -213,12 +213,15 @@ var Gameflow = (function(){
 
 
     function findBestMove(){
+        let otherPlayer;
+        currentPlayer == playerA ? otherPlayer = playerB : otherPlayer = playerA;
         let bestEvaluation = -Infinity;
         let bestMove;
         let empty_tiles = getEmptyTiles();
         for(let i = 0; i < empty_tiles.length; i++){
             _addTile(empty_tiles[i], currentPlayer);
-            let evaluation = minimax(false, 0);
+            // maybe send a variable "nextPlayer" equal to the other player and submit it with minimax formula
+            let evaluation = minimax(false, 0, otherPlayer);
             currentPlayer.state.tilesOwned.pop();
 
             if (evaluation > bestEvaluation) {
@@ -227,20 +230,20 @@ var Gameflow = (function(){
             }
 
         }
-        _addTile(bestMove, playerB);
+        _addTile(bestMove, currentPlayer);
         events.emit('aiMove', bestMove);
     }
 
 
-    function minimax(isMaximizing, depth){
+    function minimax(isMaximizing, depth, otherPlayer){
         // exit cases
-        if(playerA.checkForWin() == true){
+        if(otherPlayer.checkForWin() == true){
             return -10 - depth;
         }
-        if(playerB.checkForWin() == true){
+        if(currentPlayer.checkForWin() == true){
             return +10 - depth;
         }
-        if(playerA.checkForWin() == "tie" || playerB.checkForWin() == "tie"){
+        if(otherPlayer.checkForWin() == "tie" || currentPlayer.checkForWin() == "tie"){
             return 0;
         }
         
@@ -249,9 +252,9 @@ var Gameflow = (function(){
             let empty_tiles = getEmptyTiles();
 
             for(let i=0; i<empty_tiles.length; i++){
-                _addTile(empty_tiles[i], playerB);
-                let evaluation = minimax(false, depth + 1);
-                playerB.state.tilesOwned.pop();
+                _addTile(empty_tiles[i], currentPlayer);
+                let evaluation = minimax(false, depth + 1, otherPlayer);
+                currentPlayer.state.tilesOwned.pop();
                 
                 bestEvaluation = Math.max(evaluation, bestEvaluation);
             }
@@ -262,9 +265,9 @@ var Gameflow = (function(){
             let empty_tiles = getEmptyTiles();
 
             for(let i=0; i<empty_tiles.length; i++){
-                _addTile(empty_tiles[i], playerA);
-                let evaluation = minimax(true, depth + 1);
-                playerA.state.tilesOwned.pop();
+                _addTile(empty_tiles[i], otherPlayer);
+                let evaluation = minimax(true, depth + 1, otherPlayer);
+                otherPlayer.state.tilesOwned.pop();
 
                 bestEvaluation = Math.min(evaluation, bestEvaluation);
             }
@@ -295,8 +298,4 @@ var Gameflow = (function(){
 
 
 // TODO: 
-// Make minmax work with robot player being player 1 -- just make starting player be playerB if player 1 is chosen to be a robot
-    // TO CHANGE:
-        // findbestmove()
-        // minimax()
 // Change Player 1 and Player 2 at the bottom to their player names
