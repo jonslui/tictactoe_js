@@ -220,7 +220,6 @@ var Gameflow = (function(){
         let empty_tiles = getEmptyTiles();
         for(let i = 0; i < empty_tiles.length; i++){
             _addTile(empty_tiles[i], currentPlayer);
-            // maybe send a variable "nextPlayer" equal to the other player and submit it with minimax formula
             let evaluation = minimax(false, 0, otherPlayer);
             currentPlayer.state.tilesOwned.pop();
 
@@ -299,3 +298,4 @@ var Gameflow = (function(){
 
 // TODO: 
 // Change Player 1 and Player 2 at the bottom to their player names
+// Create a Readme doc

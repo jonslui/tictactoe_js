@@ -18,6 +18,7 @@ var Gameboard = (function(){
     events.on('playersCreated', _createBoard)
     function _createBoard(){
         gameboard.forEach(tile => _createTile(tile));
+        updatePastGameLabels()
     }
 
     function _createTile(tile){
@@ -83,17 +84,22 @@ var Gameboard = (function(){
         // does not finish the function if game was tied
         if ( winningColor == "aTile"){
             playerAWins += 1;
-            playerAGamesWonLabel.innerHTML = "Player 1 Wins: " + playerAWins;
+            updatePastGameLabels();
             playerAGamesWon.appendChild(lastgame);
         } else if( winningColor == "bTile") {
             playerBWins += 1;
-            playerBGamesWonLabel.innerHTML = "Player 2 Wins: " + playerBWins;
+            updatePastGameLabels();
             playerBGamesWon.appendChild(lastgame);
         } else {
             return;
         }
 
         tictactoeBoard.querySelectorAll('*').forEach(oldTile => addOldTileToLastGame(oldTile, lastgame));
+    }
+
+    function updatePastGameLabels(){
+        playerAGamesWonLabel.innerHTML = "Games won by " + sessionStorage.getItem("playerAName") + ": " + playerAWins;
+        playerBGamesWonLabel.innerHTML = "Games won by " + sessionStorage.getItem("playerBName") + ": " + playerBWins;
     }
 
     function addOldTileToLastGame(oldTile, lastgame){

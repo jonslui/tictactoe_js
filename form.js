@@ -54,6 +54,12 @@ var Form = (function(){
         // removes previous session storage data when a new form is opened
         sessionStorage.clear();
 
+        // remove Player 1 + 2 labels and past games
+        document.getElementById('playerAWinsLabel').setAttribute('style', 'display: none;')
+        document.getElementById('playerBWinsLabel').setAttribute('style', 'display: none;')
+        document.getElementById("playerAGames").setAttribute('style', 'display: none;')
+        document.getElementById("playerBGames").setAttribute('style', 'display: none;')
+
         // hide new game and change players buttons 
         document.getElementById("changePlayers").setAttribute('style', 'display: none;')
         document.getElementById("restartButton").setAttribute('style', 'display: none;')
@@ -110,6 +116,7 @@ var Form = (function(){
         }else if(aiPlayerBCheckbox.checked == true){
             sessionStorage.setItem('playerBDifficulty', difficultyLevel);
         }
+
     }
 
     if(sessionStorage.length == 0){
