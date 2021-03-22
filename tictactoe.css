@@ -53,6 +53,7 @@
 
 /* style addings for form container */
 .form-container {
+    font-family: 'Montserrat', sans-serif;
     max-width: 480px;
     padding: 10px;
     background-color: white;
@@ -75,6 +76,7 @@
 
 /* submit button styling */
 .form-container #submitbtn {
+    font-family: 'Montserrat', sans-serif;
     background-color: #4CAF50;
     color:white;
     padding: 16px 20px;
@@ -112,6 +114,7 @@
     font-size: 0;
 }
 #restartButton{
+    font-family: 'Montserrat', sans-serif;
     background-color: #4CAF50;
     color:white;
     padding: 16px 20px;
@@ -126,6 +129,7 @@
     opacity:1;
 }
 #changePlayers{
+    font-family: 'Montserrat', sans-serif;
     background-color: #4CAF50;
     color:white;
     padding: 16px 20px;
@@ -163,6 +167,7 @@
 }
 
 .pastGamesLabels{
+    font-family: 'Montserrat', sans-serif;
     display: block;
     text-align: left;
     padding-left: 17px;

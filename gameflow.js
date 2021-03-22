@@ -297,5 +297,4 @@ var Gameflow = (function(){
 
 
 // TODO: 
-// Change Player 1 and Player 2 at the bottom to their player names
 // Create a Readme doc
