@@ -10,8 +10,6 @@ This version of Tic-tac-toe utilizes forms for character creation, sessionStorag
 ![Player creation form](https://github.com/jonslui/tictactoe_js/blob/master/README_images/Player_creation_form.png)
 
 3. Choose to play a game with two human players or one human and one AI player.
-![AI player selection](https://github.com/jonslui/tictactoe_js/blob/master/README_images/AI_player_selection.png)
-
 4. If playing against the AI, choose your opponent's difficulty level.
 ![Difficulty selection](https://github.com/jonslui/tictactoe_js/blob/master/README_images/Difficulty_selection.png)
 
