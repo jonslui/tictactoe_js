@@ -2,6 +2,11 @@
 
 This version of Tic-tac-toe utilizes forms for character creation, sessionStorage, pubsub design, and variable difficulty through a combination of the minimax algorithm and random moves.
 
+## Demo Video
+
+![tictactoe_demo_gif](https://user-images.githubusercontent.com/34390833/114447176-54c8b380-9b8f-11eb-88c3-bc8623ca0326.gif)
+
+
 ## Usage
 
 1. Download the gameflow.js, gameboard.js, form.js, pubsub.js, index.html, and tictactoe.css files.
