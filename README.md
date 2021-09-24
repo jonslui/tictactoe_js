@@ -1,3 +1,5 @@
+Demo: https://jonslui.github.io/tictactoe_js/
+
 ## Tic-tac-toe
 
 This version of Tic-tac-toe utilizes forms for character creation, sessionStorage, pubsub design, and variable difficulty through a combination of the minimax algorithm and random moves.
