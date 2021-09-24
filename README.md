@@ -11,7 +11,7 @@ This version of Tic-tac-toe utilizes forms for character creation, sessionStorag
 
 ## Usage
 
-1. Download the gameflow.js, gameboard.js, form.js, pubsub.js, index.html, and tictactoe.css files.
+1. Follow this link: https://jonslui.github.io/tictactoe_js/, or download the gameflow.js, gameboard.js, form.js, pubsub.js, index.html, and tictactoe.css files.
 
 2. Open the index.html file in your browser of choice.
 ![Player creation form](https://github.com/jonslui/tictactoe_js/blob/master/README_images/Player_creation_form.png)
